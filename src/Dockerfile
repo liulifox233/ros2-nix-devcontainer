@@ -87,9 +87,9 @@ ONBUILD ARG USER_GID=${USER_UID}
 ONBUILD RUN \
     if [ -z ${USER_UID} ] || [ -z ${USER_UID} ] || [ -z ${USERNAME} ]; then exit 0; fi && \
     set -x && \
-    if [ "$(id -u code)" != "${USER_UID}" ] || [ "$(id -g code)" != "${USER_GID}" ]; then \
-        groupmod -g ${USER_GID} -n ${USERNAME} code || true && \
-        usermod -u ${USER_UID} -g ${USER_GID} -l ${USERNAME} -m -d /home/${USERNAME} code && \
+    if [ "$(id -u ros)" != "${USER_UID}" ] || [ "$(id -g ros)" != "${USER_GID}" ]; then \
+        groupmod -g ${USER_GID} -n ${USERNAME} ros || true && \
+        usermod -u ${USER_UID} -g ${USER_GID} -l ${USERNAME} -m -d /home/${USERNAME} ros && \
         chown -R ${USER_UID}:${USER_GID} /nix && \
         chown -R ${USER_UID}:${USER_GID} /home/${USERNAME} && \
         echo ${USERNAME} ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/devcontainer; \
