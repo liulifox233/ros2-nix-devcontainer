@@ -1,4 +1,4 @@
-FROM xtruder/nix-devcontainer
+FROM liulifox/ros2-nix-devcontainer
 
 VOLUME /nix
 

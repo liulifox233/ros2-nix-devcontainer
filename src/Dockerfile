@@ -4,9 +4,9 @@ ADD ext-preloader /src
 WORKDIR /src
 RUN go build -o /ext-preloader main.go 
 
-FROM debian:stable-slim
+FROM althack/ros2:humble-dev
 
-LABEL maintainer="X-Truder <dev@x-truder.net>"
+LABEL maintainer="LiuliFox <vision@cygnomatic.net>"
 
 # change build shell to /bin/bash, so env will be set correctly
 SHELL ["/bin/bash", "-c"]
