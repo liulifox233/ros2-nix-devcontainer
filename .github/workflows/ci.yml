@@ -1,17 +1,15 @@
 name: ci
 
 on:
-  schedule:
-    - cron: '0 10 * * *' # everyday at 10am
   push:
     branches:
       - "main"
     tags:
-      - 'v*'
+      - "v*"
   pull_request:
     branches:
-      - 'main'
-      
+      - "main"
+
 jobs:
   docker:
     runs-on: ubuntu-latest
@@ -20,11 +18,11 @@ jobs:
       contents: read
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Login to DockerHub
         if: github.event_name != 'pull_request'
-        uses: docker/login-action@v1 
+        uses: docker/login-action@v1
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -41,18 +39,21 @@ jobs:
         uses: docker/metadata-action@v3
         with:
           images: |
-            xtruder/nix-devcontainer
-            ghcr.io/${{ github.repository }} 
+            liulifox/ros2-nix-devcontainer
+            ghcr.io/${{ github.repository }}
           tags: |
             type=semver,pattern=v{{version}}
             type=semver,pattern=v{{major}}
             type=edge,branch=main
 
       - name: Build and push docker image to dockerhub
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v6
         with:
           context: "./src"
           file: ./src/Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          platforms: |
+            linux/amd64
+            linux/arm64
