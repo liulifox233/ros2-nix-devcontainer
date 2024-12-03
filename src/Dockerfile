@@ -44,14 +44,9 @@ RUN apt -y install --no-install-recommends \
 # create at least locae for en_US.UTF-8
 RUN echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen && locale-gen
 
-# create non-root user and group and add it sudoers
-ARG USERNAME=code
+ARG USERNAME=ros
 ARG USER_UID=1000
 ARG USER_GID=${USER_UID}
-RUN groupadd --gid ${USER_GID} ${USERNAME} && \
-    useradd --uid ${USER_UID} --gid ${USER_GID} -m ${USERNAME} -s /bin/bash && \
-    echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/devcontainer && \
-    chmod 0440 /etc/sudoers.d/devcontainer
 
 # copy nix configuration
 COPY etc/nix.conf /etc/nix/nix.conf
@@ -84,7 +79,7 @@ ENTRYPOINT [ "/docker-entrypoint.sh" ]
 ONBUILD USER root
 
 # Arguments for username and user_uid and user_gid that can be changed
-ONBUILD ARG USERNAME=code
+ONBUILD ARG USERNAME=ros
 ONBUILD ARG USER_UID=1000
 ONBUILD ARG USER_GID=${USER_UID}
 
